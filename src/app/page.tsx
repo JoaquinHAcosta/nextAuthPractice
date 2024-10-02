@@ -1,3 +1,4 @@
+import { auth } from '@/auth'
 import {
   Card,
   CardContent,
@@ -7,6 +8,7 @@ import {
 import Image from 'next/image'
 
 export default async function Home() {
+  const session = await auth()
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24">
       <Card className="max-w-sm">
@@ -22,7 +24,7 @@ export default async function Home() {
         </CardHeader>
         <CardContent>
           <CardTitle className="mb-2 text-2xl font-bold">
-            Welcome, user!
+            Welcome, {session ? `${session?.user?.name}` : 'user'}!
           </CardTitle>
           <p className="text-muted-foreground">
             If you are learning something valuable from this video, please like
