@@ -32,7 +32,7 @@ import { useState } from 'react'
 import ErrorMessage from '@/src/components/error-message'
 import { Button } from '@/src/components/ui/button'
 
-export default function SignIn() {
+export default function Page() {
   const [globalError, setGlobalError] = useState<string>('')
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
