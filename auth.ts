@@ -2,6 +2,9 @@ import NextAuth from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import { signInSchema } from './src/lib/zod'
 
+const publicRoutes = ['/auth/signin', '/auth/signup']
+const authRoutes = ['/auth/signin', '/auth/signup']
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
@@ -48,17 +51,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       const { pathname } = nextUrl
 
-      const role = auth?.user.role || 'user'
-
-      if (pathname.startsWith('/auth/signin') && isLoggedIn) {
-        return Response.redirect(new URL('/', nextUrl))
+      if (publicRoutes.includes(pathname)) {
+        return true
       }
 
-      if (pathname.startsWith('/page2') && role !== 'admin') {
-        return Response.redirect(new URL('/', nextUrl))
+      if (authRoutes.includes(pathname)) {
+        if (isLoggedIn) {
+          return Response.redirect(new URL('/', nextUrl))
+        }
+
+        return true
       }
 
-      return !!auth
+      return isLoggedIn
     },
 
     jwt({ token, user, trigger, session }) {
